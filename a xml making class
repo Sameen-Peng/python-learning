@@ -1,0 +1,117 @@
+import xml.dom.minidom
+
+class xmlwritting(object):
+
+    def __init__(self,doc):
+        self.doc = doc
+        self.root = self.doc.createElement('ASD')
+        self.root.setAttribute('version', '1.2')
+        self.doc.appendChild(self.root)
+        
+
+    def info(self):
+        #info node
+        nodeinfo = self.doc.createElement('info')
+        nodeAxismask = self.doc.createElement('Axismask')
+        nodeAxismask.appendChild(self.doc.createTextNode('3'))
+        nodeTechnoEnable = self.doc.createElement('TechnoEnable')
+        nodeTechnoEnable.appendChild(self.doc.createTextNode('0'))
+        nodeMinmoldNoAlm = self.doc.createElement('MinmoldNoAlm')
+        nodeMinmoldNoAlm.appendChild(self.doc.createTextNode('00000000000000000000000000000000'))
+        nodeTPIgnore = self.doc.createElement('TPIgnore')
+        nodeTPIgnore.appendChild(self.doc.createTextNode('00000000000000000000000000000000'))
+        nodeinfo.appendChild(nodeAxismask)
+        nodeinfo.appendChild(nodeTechnoEnable)
+        nodeinfo.appendChild(nodeMinmoldNoAlm)
+        nodeinfo.appendChild(nodeTPIgnore)
+        self.root.appendChild(nodeinfo)
+        
+
+    def program(self,X,Y):
+        #movel function
+        def movfunc(coordinate):
+            nodec = self.doc.createElement('c')
+            nodec.setAttribute('Rem', '0')
+            nodec.setAttribute('id', 'MOV55')
+            nodep = self.doc.createElement('p')
+            nodep.appendChild(self.doc.createTextNode('1,11,0,0,0,0,100,0'))
+            nodec.appendChild(nodep)
+            nodep = self.doc.createElement('p')
+            nodep.appendChild(self.doc.createTextNode('100,-2,-2,0,0,0'))
+            nodec.appendChild(nodep)
+            nodep = self.doc.createElement('p')
+            nodep.appendChild(self.doc.createTextNode(coordinate))
+            nodec.appendChild(nodep)
+            nodeprogram.appendChild(nodec)
+        #program node    
+        nodeprogram = self.doc.createElement('program')
+        nodec = self.doc.createElement('c')
+        nodec.setAttribute('id', 'BEG0')
+        nodeprogram.appendChild(nodec)
+        for x,y in zip(X,Y):
+            coor = [y+400,x-140,-41,-180,0,0,0,0,0,0,0,0]
+            strcoor = ','.join([str(i) for i in coor])
+            movfunc(strcoor)
+        nodec = self.doc.createElement('c')
+        nodec.setAttribute('id', 'END64')
+        nodeprogram.appendChild(nodec)
+        self.root.appendChild(nodeprogram)
+
+    def data(self):
+        #data node
+        nodedata = self.doc.createElement('data')
+        nodejump_lable = self.doc.createElement('jump_lable')
+        nodelable = self.doc.createElement('lable')
+        nodelable.setAttribute('num', '1')
+        nodelable.setAttribute('active', '0')
+        nodejump_lable.appendChild(nodelable)
+        
+        nodeposition = self.doc.createElement('position')
+        nodepos = self.doc.createElement('pos')
+        nodepos.setAttribute('num', '1')
+        nodepos.setAttribute('active', '0')
+        nodep = self.doc.createElement('p')
+        nodep.setAttribute('m', '')
+        nodep.setAttribute('n', 'POSALL')
+        nodep.appendChild(self.doc.createTextNode('0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;'))
+        nodepos.appendChild(nodep)
+        nodeposition.appendChild(nodepos)
+
+        nodejposition = self.doc.createElement('jposition')
+        nodejpos = self.doc.createElement('jpos')
+        nodejpos.setAttribute('num', '1')
+        nodejpos.setAttribute('active', '0')
+        nodep = self.doc.createElement('p')
+        nodep.setAttribute('m', '')
+        nodep.setAttribute('n', 'JPOSALL')
+        nodep.appendChild(self.doc.createTextNode('0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;'))
+        nodejpos.appendChild(nodep)
+        nodejposition.appendChild(nodejpos)
+        
+        nodedata.appendChild(nodejump_lable)
+        nodedata.appendChild(nodeposition)
+        nodedata.appendChild(nodejposition)
+        self.root.appendChild(nodedata)
+
+        
+    def Reserved(self):
+        #Reserved node
+        nodeReserved = self.doc.createElement('Reserved')
+        nodeRes = self.doc.createElement('Res')
+        nodeRes.appendChild(self.doc.createTextNode('0'))
+        nodeReserved.appendChild(nodeRes)
+        self.root.appendChild(nodeReserved)
+
+    def output(self):
+        filepath = open('c:\\Users\\Administrator\\Desktop\\ASD.xml', 'w')
+        self.doc.writexml(filepath, indent='\t', addindent='\t', newl='\n', encoding="utf-8")
+
+if __name__ == '__main__':
+    test1 = xmlwritting(xml.dom.minidom.Document())
+    test1.info()
+    X=[10,20,30]
+    Y=[0,0,0]
+    test1.program(X,Y)
+    test1.data()
+    test1.Reserved()
+    test1.output()
