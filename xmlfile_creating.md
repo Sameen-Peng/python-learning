@@ -26,13 +26,13 @@ for i in managerList :
   nodeAge = doc.createElement("age")
   nodeAge.appendChild(doc.createTextNode(str(i["age"])))
 
-  nodeSex = doc.createElement("sex")
-  nodeSex.appendChild(doc.createTextNode(str(i["sex"])))
+  nodeSex = doc.createElement("gender")
+  nodeSex.appendChild(doc.createTextNode(str(i["gender"])))
 
   #add all child nodes into root node
   nodeManager.appendChild(nodeName)
   nodeManager.appendChild(nodeAge)
-  nodeManager.appendChild(nodeSex)
+  nodeManager.appendChild(nodeGender)
   root.appendChild(nodeManager)
   
 #output
