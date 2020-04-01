@@ -1,4 +1,4 @@
-# using python to make a xml file in some certain format 
+# to make a xml file in some certain format 
 
 import xml.dom.minidom
 
